@@ -1,14 +1,15 @@
-_G.AutoClick = true
-spawn(function()
-    game:GetService("RunService").RenderStepped:Connect(function()
-        if _G.AutoClick or Fastattack then
-             pcall(function()
-                game:GetService'VirtualUser':CaptureController()
-                game:GetService'VirtualUser':Button1Down(Vector2.new(0,1,0,1))
-            end)
+local CombatFramework = require(game:GetService("Players").LocalPlayer.PlayerScripts.CombatFramework)
+local Camera = require(game.ReplicatedStorage.Util.CameraShaker)
+Camera:Stop()
+coroutine.wrap(function()
+    game:GetService("RunService").Stepped:Connect(function()
+        if getupvalues(CombatFramework)[2]['activeController'].timeToNextAttack then
+            getupvalues(CombatFramework)[2]['activeController'].timeToNextAttack = 0
+            getupvalues(CombatFramework)[2]['activeController'].hitboxMagnitude = 40
+            getupvalues(CombatFramework)[2]['activeController']:attack()
         end
     end)
-end)
+end)()
 task.spawn(function()
     while wait() do
         for i,v in pairs(game:GetService("Workspace")["_WorldOrigin"]:GetChildren()) do
@@ -2211,7 +2212,7 @@ spawn(function()
 	end
 end)
     --------------------------------------------------------------------
-local win = library:AddWindow("Happy XD","Main BloxFruits",Enum.KeyCode.RightControl)
+local win = library:AddWindow("TALK","Main BloxFruits",Enum.KeyCode.RightControl)
 --Tab
 Main = win:AddTab("Main")
 Swords = win:AddTab("Swords")
@@ -2224,7 +2225,6 @@ DevilFruit = win:AddTab("DevilFruits")
 Shop = win:AddTab("Shop")
 Misc = win:AddTab("Misc")
 Set = win:AddTab("Settings")
-Hub = win:AddTab("Hub")
 
      Main:AddSeperator("Settings")
      Time = Main:AddLabel("Server Time")
@@ -2263,15 +2263,15 @@ Hub = win:AddTab("Hub")
     
     Main:AddSeperator("AutoFarm Settings")
     
-    Main:AddSlider("Farm Pos (X)",1,30,5,function(value)
+    Main:AddSlider("Farm Pos (X)",1,30,10,function(value)
         getgenv().X = value
     end)
     
-    Main:AddSlider("Farm Pos (Y)",1,30,10,function(value)
+    Main:AddSlider("Farm Pos (Y)",1,30,30,function(value)
         getgenv().Y = value
     end)
     
-    Main:AddSlider("Farm Pos (Z)",1,30,7,function(value)
+    Main:AddSlider("Farm Pos (Z)",1,30,10,function(value)
         getgenv().Z = value
     end)
     
